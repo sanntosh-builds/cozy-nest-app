@@ -279,7 +279,7 @@ export default function CozyNest() {
                 Continue — Rs {price.toLocaleString()}
               </button>
 
-              
+              <a
                 href={`https://wa.me/${PAYMENT.whatsapp}`}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -334,7 +334,7 @@ export default function CozyNest() {
                 Send Rs {price.toLocaleString()} to either number above, then tap below to confirm.
               </p>
 
-              
+              <a
                 href={confirmWaLink}
                 target="_blank"
                 rel="noopener noreferrer"
