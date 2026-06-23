@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Lock, MapPin, Wifi, ShieldCheck, Moon, Sparkles, Heart, Flame, PartyPopper, Plus, Camera, MessageCircle, User, ChevronDown, TreePine } from 'lucide-react';
+import { Lock, MapPin, Wifi, ShieldCheck, Moon, Sparkles, Heart, Flame, PartyPopper, Plus, Camera, MessageCircle, User, ChevronDown, TreePine, Copy, Check } from 'lucide-react';
 
 const COLORS = {
   bg: '#1F1421',
@@ -53,6 +53,12 @@ const FAQS = [
   { q: 'What if my plans change?', a: 'You can cancel free of charge up to 2 hours before your check-in time, no questions asked.' },
 ];
 
+const PAYMENT = {
+  whatsapp: '9779863668193',
+  esewaId: '9863668193',
+  khaltiId: '9863668193',
+};
+
 export default function CozyNest() {
   const [duration, setDuration] = useState('overnight');
   const [mood, setMood] = useState('plain');
@@ -60,6 +66,7 @@ export default function CozyNest() {
   const [step, setStep] = useState('browse');
   const [extraHours, setExtraHours] = useState(0);
   const [openFaq, setOpenFaq] = useState(null);
+  const [copied, setCopied] = useState('');
 
   const moodInfo = MOODS.find((m) => m.key === mood);
   const basePrice = PRICING[duration] + moodInfo.addon;
@@ -68,8 +75,19 @@ export default function CozyNest() {
   function handleReserve(e) {
     e.preventDefault();
     if (!date) return;
-    setStep('confirmed');
+    setStep('payment');
   }
+
+  function handleCopy(text, label) {
+    navigator.clipboard?.writeText(text);
+    setCopied(label);
+    setTimeout(() => setCopied(''), 2000);
+  }
+
+  const confirmMessage = `Hi! I'd like to book Tree House Resort, Sankhu — ${DURATION_LABEL[duration]} on ${date}${
+    moodInfo.key !== 'plain' ? ` with ${moodInfo.label}` : ''
+  }. Total: Rs ${price}. I've sent the payment, please confirm my booking.`;
+  const confirmWaLink = `https://wa.me/${PAYMENT.whatsapp}?text=${encodeURIComponent(confirmMessage)}`;
 
   return (
     <div style={{ background: COLORS.bgDeep, color: COLORS.cream, minHeight: '100vh', fontFamily: "'Work Sans', sans-serif" }}>
@@ -258,11 +276,11 @@ export default function CozyNest() {
                 className="w-full rounded-full py-3 font-medium transition hover:opacity-90"
                 style={{ background: COLORS.amber, color: COLORS.bgDeep }}
               >
-                Reserve — Rs {price.toLocaleString()}
+                Continue — Rs {price.toLocaleString()}
               </button>
 
-              <a
-                href="https://wa.me/9770000000000"
+              
+                href={`https://wa.me/${PAYMENT.whatsapp}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full flex items-center justify-center gap-2 rounded-full py-3 text-sm transition hover:opacity-90"
@@ -272,29 +290,83 @@ export default function CozyNest() {
               </a>
 
               <p className="text-xs text-center" style={{ color: COLORS.faint }}>
-                Payment via eSewa or Khalti. Address sent only to you, after payment.<br />
+                Pay via eSewa or Khalti, then confirm on WhatsApp.<br />
                 Free cancellation up to 2 hours before check-in.
               </p>
             </form>
           )}
 
-          {step === 'confirmed' && (
+          {step === 'payment' && (
+            <div className="py-2">
+              <h3 style={{ fontFamily: "'Fraunces', serif" }} className="text-xl mb-2 text-center">Send your payment</h3>
+              <p className="text-sm mb-5 text-center" style={{ color: COLORS.muted }}>
+                {DURATION_LABEL[duration]} on {date}
+                {moodInfo.key !== 'plain' ? ` · ${moodInfo.label}` : ''} — Rs {price.toLocaleString()}
+              </p>
+
+              <div className="space-y-3 mb-5">
+                {[
+                  { label: 'eSewa', id: PAYMENT.esewaId },
+                  { label: 'Khalti', id: PAYMENT.khaltiId },
+                ].map((p) => (
+                  <div
+                    key={p.label}
+                    className="flex items-center justify-between rounded-xl p-4"
+                    style={{ background: COLORS.bgDeep, border: `1px solid ${COLORS.clay}33` }}
+                  >
+                    <div>
+                      <p className="text-xs" style={{ color: COLORS.faint }}>{p.label} number</p>
+                      <p style={{ fontFamily: "'JetBrains Mono', monospace", color: COLORS.cream }} className="text-sm mt-0.5">{p.id}</p>
+                    </div>
+                    <button
+                      onClick={() => handleCopy(p.id, p.label)}
+                      className="flex items-center gap-1 rounded-full px-3 py-2 text-xs"
+                      style={{ border: '1px solid #4a3a4d', color: COLORS.muted }}
+                    >
+                      {copied === p.label ? <Check size={14} style={{ color: COLORS.amber }} /> : <Copy size={14} />}
+                      {copied === p.label ? 'Copied' : 'Copy'}
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              <p className="text-xs text-center mb-5" style={{ color: COLORS.faint }}>
+                Send Rs {price.toLocaleString()} to either number above, then tap below to confirm.
+              </p>
+
+              
+                href={confirmWaLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setStep('submitted')}
+                className="w-full flex items-center justify-center gap-2 rounded-full py-3 font-medium transition hover:opacity-90"
+                style={{ background: COLORS.amber, color: COLORS.bgDeep }}
+              >
+                <MessageCircle size={16} /> I've paid — confirm on WhatsApp
+              </a>
+
+              <button onClick={() => setStep('browse')} className="w-full text-center text-sm underline mt-4" style={{ color: COLORS.muted }}>
+                Back
+              </button>
+            </div>
+          )}
+
+          {step === 'submitted' && (
             <div className="text-center py-4">
               <Sparkles size={28} style={{ color: COLORS.amber }} className="mx-auto mb-3" />
-              <h3 style={{ fontFamily: "'Fraunces', serif" }} className="text-xl mb-2">You're booked.</h3>
+              <h3 style={{ fontFamily: "'Fraunces', serif" }} className="text-xl mb-2">Booking request sent</h3>
               <p className="text-sm mb-5" style={{ color: COLORS.muted }}>
                 {DURATION_LABEL[duration]} on {date}
-                {moodInfo.key !== 'plain' ? ` · ${moodInfo.label}` : ''}
-                {extraHours > 0 ? ` · +${extraHours}h extended` : ''}.
+                {moodInfo.key !== 'plain' ? ` · ${moodInfo.label}` : ''}.
               </p>
               <div
                 className="rounded-xl p-4 text-left text-sm space-y-2"
                 style={{ background: COLORS.bgDeep, border: `1px solid ${COLORS.clay}33` }}
               >
-                <p><span style={{ color: COLORS.amberSoft }}>Address:</span> Sent via SMS, 30 minutes before check-in.</p>
-                <p><span style={{ color: COLORS.amberSoft }}>Host contact:</span> Shared in your confirmation message.</p>
+                <p><span style={{ color: COLORS.amberSoft }}>Status:</span> Waiting for confirmation on WhatsApp.</p>
+                <p><span style={{ color: COLORS.amberSoft }}>Cottage & directions:</span> Sent once confirmed.</p>
                 <p><span style={{ color: COLORS.amberSoft }}>Check-in:</span> Self entry, no front desk.</p>
-                <p><span style={{ color: COLORS.amberSoft }}>Total paid:</span> Rs {price.toLocaleString()}</p>
+                <p><span style={{ color: COLORS.amberSoft }}>Total:</span> Rs {price.toLocaleString()}</p>
               </div>
 
               <div
