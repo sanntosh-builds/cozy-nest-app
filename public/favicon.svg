@@ -1,0 +1,16 @@
+<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+  <title>Cozy Nest icon</title>
+  <desc>A square badge with concentric woven amber rings around a simple pine tree mark</desc>
+  <rect x="0" y="0" width="320" height="320" rx="56" fill="#1F1421"/>
+
+  <circle cx="160" cy="160" r="118" fill="none" stroke="#E8A33D" stroke-opacity="0.5" stroke-width="2" stroke-dasharray="11 9"/>
+  <circle cx="160" cy="160" r="94" fill="none" stroke="#8B3A2B" stroke-opacity="0.55" stroke-width="2" stroke-dasharray="9 8"/>
+  <circle cx="160" cy="160" r="70" fill="none" stroke="#E8A33D" stroke-opacity="0.6" stroke-width="2" stroke-dasharray="7 7"/>
+
+  <g fill="#E8A33D">
+    <polygon points="160,102 134,150 186,150"/>
+    <polygon points="160,126 130,178 190,178"/>
+    <polygon points="160,150 122,208 198,208"/>
+  </g>
+  <rect x="152" y="204" width="16" height="26" fill="#8B3A2B"/>
+</svg>
