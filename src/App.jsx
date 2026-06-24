@@ -152,9 +152,9 @@ export default function CozyNest() {
 
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 style={{ fontFamily: "'Fraunces', serif" }} className="text-2xl">Tree House Resort, Sankhu</h2>
+              <h2 style={{ fontFamily: "'Fraunces', serif" }} className="text-2xl">Hillside Cottage, Sankhu</h2>
               <p className="flex items-center gap-1 text-sm mt-1" style={{ color: COLORS.muted }}>
-                <MapPin size={14} /> Cottage number & directions shared after booking
+                <MapPin size={14} /> Property name & directions shared after booking
               </p>
               <div
                 className="inline-flex items-center gap-1.5 mt-3 px-3 py-1 rounded-full text-xs"
@@ -364,7 +364,7 @@ export default function CozyNest() {
                 style={{ background: COLORS.bgDeep, border: `1px solid ${COLORS.clay}33` }}
               >
                 <p><span style={{ color: COLORS.amberSoft }}>Status:</span> Waiting for confirmation on WhatsApp.</p>
-                <p><span style={{ color: COLORS.amberSoft }}>Cottage & directions:</span> Sent once confirmed.</p>
+                <p><span style={{ color: COLORS.amberSoft }}>Property name & directions:</span> Sent once confirmed.</p>
                 <p><span style={{ color: COLORS.amberSoft }}>Check-in:</span> Self entry, no front desk.</p>
                 <p><span style={{ color: COLORS.amberSoft }}>Total:</span> Rs {price.toLocaleString()}</p>
               </div>
